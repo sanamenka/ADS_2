@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <ctime>
 
+
 class BinaryTree {
 public:
 	struct Node {
@@ -10,7 +11,8 @@ public:
 		Node(int key = 0, Node* left = nullptr, Node* right = nullptr) : key(key), left(left), right(right) {}
 		~Node() = default;
 	};
-private:
+protected:
+
 	Node* root{ nullptr };
 
 	Node* copyTree(const Node* otherRoot) {
@@ -40,11 +42,63 @@ private:
 		return node;
 	}
 
+	Node* nlrSearch(Node* node, int key) const {
+		if (!node || node->key == key)
+			return node;
+		Node* searchResult = nlrSearch(node->left, key);
+		if (!searchResult)
+			searchResult = nlrSearch(node->right, key);
+		return searchResult;
+	}
+
+	Node* deleteNode(Node* node, int key) {
+		if (!node || node->key == key)
+			return node;
+		Node* searchResult = nlrSearch(node->left, key);
+		if (!searchResult)
+			searchResult = nlrSearch(node->right, key);
+
+		if (searchResult->key == key) {
+			Node* rnode = rSearch(searchResult);
+			if (!rnode)
+				
+			if (searchResult == node->left) {
+				rnode->left = node->left->left;
+				rnode->right = node->left->right;
+				delete node->left;
+				node->left = rnode;
+			}
+			if (searchResult == node->right) {
+				rnode->left = node->right->left;
+				rnode->right = node->right->right;
+				delete node->right;
+				node->right = rnode;
+			}
+		}
+		return searchResult;
+	}
+
+	Node* rSearch(Node* node) const {
+		if (!node)
+			return node;
+		Node* searchResult = rSearch(node->right);
+		if (!searchResult)
+			searchResult = rSearch(node->left);
+		if (!searchResult) {
+			return node;
+		}
+		if (searchResult == node->right)
+			node->right = nullptr;
+		if (searchResult == node->left)
+			node->left = nullptr;
+		return searchResult;
+	}
+
 public:
 	BinaryTree() = default;
 
 	BinaryTree(const BinaryTree& other) {
-		copyTree(other.root);
+		root = copyTree(other.root);
 	}
 
 	~BinaryTree() {
@@ -67,18 +121,27 @@ public:
 		return 1 + countNodes(node->left) + countNodes(node->right);
 	}
 
-	void insertRandom(int key) {
+	virtual void insert(int key) {
 		root = addNodeRandom(root, key);
 	}
+
+	virtual bool deleteNode(int key) {
+		return deleteNode(root, key);
+	}
+
+	virtual Node* searchNode(int key) const {
+		return nlrSearch(root, key);
+	}
+
+
 };
 
-class SearchTree : BinaryTree {
+class SearchTree : public BinaryTree {
 
 };
 
 int main() {
 	BinaryTree mTree;
-	mTree.insertRandom(10);
-
+	mTree.insert(10);
 	return 0;
 }
