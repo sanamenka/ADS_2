@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "A:\\Applications\\ADS_2\\ADS_2\\BinaryTree\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{9BCC4416-D084-48EF-811C-560D7F6BBBAD}|BinaryTree\\BinaryTree.vcxproj|A:\\Applications\\ADS_2\\ADS_2\\BinaryTree\\BinaryTree\\BinaryTree.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9BCC4416-D084-48EF-811C-560D7F6BBBAD}|BinaryTree\\BinaryTree.vcxproj|solutionrelative:BinaryTree\\BinaryTree.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "BinaryTree.cpp",
+              "DocumentMoniker": "A:\\Applications\\ADS_2\\ADS_2\\BinaryTree\\BinaryTree\\BinaryTree.cpp",
+              "RelativeDocumentMoniker": "BinaryTree\\BinaryTree.cpp",
+              "ToolTip": "A:\\Applications\\ADS_2\\ADS_2\\BinaryTree\\BinaryTree\\BinaryTree.cpp",
+              "RelativeToolTip": "BinaryTree\\BinaryTree.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAXAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-05-16T14:38:07.423Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
