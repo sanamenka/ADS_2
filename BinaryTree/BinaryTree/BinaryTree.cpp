@@ -1,3 +1,5 @@
+#include <cstdlib>
+#include <ctime>
 
 class BinaryTree {
 public:
@@ -28,6 +30,16 @@ private:
 		}
 	}
 
+	Node* addNodeRandom(Node* node, int key) {
+		if (node == nullptr)
+			return new Node(key);
+		if (std::rand() % 2 == 0)
+			node->left = addNodeRandom(node->left, key);
+		else
+			node->right = addNodeRandom(node->right, key);
+		return node;
+	}
+
 public:
 	BinaryTree() = default;
 
@@ -39,8 +51,34 @@ public:
 		deleteTree(root);
 	}
 
+	Node* getRoot() const {
+		return root;
+	}
+
+	bool isEmpty() const {
+		if (root == nullptr)
+			return true;
+		return false;
+	}
+	
+	int countNodes(const Node* node) {
+		if (node == nullptr)
+			return 0;
+		return 1 + countNodes(node->left) + countNodes(node->right);
+	}
+
+	void insertRandom(int key) {
+		root = addNodeRandom(root, key);
+	}
 };
 
 class SearchTree : BinaryTree {
 
 };
+
+int main() {
+	BinaryTree mTree;
+	mTree.insertRandom(10);
+
+	return 0;
+}
