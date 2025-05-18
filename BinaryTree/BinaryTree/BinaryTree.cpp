@@ -83,8 +83,14 @@ protected:
 		
 		if (node->key == key) {
 			if (!node->left && !node->right) {
+				Node* parent = parentSearch(root, node);
+				if (parent->left == node) {
+					parent->left = nullptr;
+				}
+				else
+					parent->right = nullptr;
 				delete node;
-				return nullptr;
+				return parent;
 			}
 
 			if (!node->left) {
@@ -95,7 +101,10 @@ protected:
 					root = temp;
 					return temp;
 				}
-				parent->right = temp;
+				if (parent->left == node)
+					parent->left = temp;
+				else
+					parent->right = temp;
 				return temp;
 			}
 
@@ -107,10 +116,13 @@ protected:
 					root = temp;
 					return temp;
 				}
-				parent->left = temp;
+				if (parent->left == node)
+					parent->left = temp;
+				else
+					parent->right = temp;
 				return temp;
 			}
-			
+
 			Node* temp = leafSearch(node);
 			Node* parentTemp = parentSearch(root, temp);
 			if (parentTemp->left == temp)
@@ -134,12 +146,11 @@ protected:
 			root = temp;
 			delete node;
 			return temp;
-			
 		}
 		Node* searchResult = deleteNode(node->right, key);
 		if (searchResult)
 			return searchResult;
-		searchResult = deleteNode(node->left, key);
+		return searchResult = deleteNode(node->left, key);
 	}
 
 	void printTree(Node* node, int depth = 0) const {
@@ -158,7 +169,7 @@ public:
 		root = copyTree(other.root);
 	}
 
-	~BinaryTree() {
+	virtual ~BinaryTree() {
 		deleteTree(root);
 	}
 
@@ -183,6 +194,12 @@ public:
 	}
 
 	virtual bool deleteNode(int key) {
+		if (root->key == key && !root->left && !root->right) {
+			delete root;
+			root = nullptr;
+			return true;
+		}
+
 		if (isEmpty()) {
 			return false;
 		}
@@ -202,22 +219,65 @@ public:
 };
 
 class SearchTree : public BinaryTree {
+private:
+
+	Node* addNode(Node* node, int key) {
+
+	}
+
+public:
+	SearchTree() = default;
+	SearchTree(const SearchTree& other) : BinaryTree(other) {}
+	~SearchTree() override = default;
+	
+	void insert(int key) override {
+		root = addNode(root, key);
+	}
+
+	bool deleteNode(int key) override {
+
+	}
+
+	Node* searchNode(int key) const override {
+
+	}
 
 };
 
 int main() {
+	//std::srand(static_cast<unsigned>(std::time(nullptr)));
 	BinaryTree mTree;
 	mTree.insert(10);
-	mTree.insert(20);
-	mTree.insert(14);
-	mTree.insert(44);
-	mTree.insert(54);
-	mTree.insert(55);
-	mTree.insert(56);
-	mTree.insert(57);
+	mTree.insert(11);
+	mTree.insert(13);
+	mTree.insert(15);
+	mTree.insert(12);
+	mTree.insert(23);
+	mTree.insert(25);
+	mTree.insert(35);
+	mTree.insert(46);
+	mTree.insert(75);
+	mTree.insert(34);
+	mTree.insert(1);
+	mTree.insert(2);
+	mTree.insert(3);
+	mTree.insert(4);
+	mTree.insert(5);
 	mTree.print();
 	std::cout << "--------------------------------------------------------------------------" << std::endl;
 	std::cout << mTree.deleteNode(30) << std::endl;
+	std::cout << mTree.deleteNode(4) << std::endl;
+	std::cout << "--------------------------------------------------------------------------" << std::endl;
+	mTree.print();
+	std::cout << mTree.deleteNode(5) << std::endl;
+	std::cout << "--------------------------------------------------------------------------" << std::endl;
+	mTree.print();
+	std::cout << mTree.deleteNode(13) << std::endl;
+	std::cout << "--------------------------------------------------------------------------" << std::endl;
+	mTree.print();
+	std::cout << mTree.deleteNode(15) << std::endl;
+	std::cout << "--------------------------------------------------------------------------" << std::endl;
+	mTree.print();
 	std::cout << mTree.deleteNode(10) << std::endl;
 	std::cout << "--------------------------------------------------------------------------" << std::endl;
 	mTree.print();
