@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <ctime>
+#include <iostream>
 
 
 class BinaryTree {
@@ -51,48 +52,104 @@ protected:
 		return searchResult;
 	}
 
-	Node* deleteNode(Node* node, int key) {
-		if (!node || node->key == key)
-			return node;
-		Node* searchResult = nlrSearch(node->left, key);
-		if (!searchResult)
-			searchResult = nlrSearch(node->right, key);
-
-		if (searchResult->key == key) {
-			Node* rnode = rSearch(searchResult);
-			if (!rnode)
-				
-			if (searchResult == node->left) {
-				rnode->left = node->left->left;
-				rnode->right = node->left->right;
-				delete node->left;
-				node->left = rnode;
-			}
-			if (searchResult == node->right) {
-				rnode->left = node->right->left;
-				rnode->right = node->right->right;
-				delete node->right;
-				node->right = rnode;
-			}
-		}
-		return searchResult;
-	}
-
-	Node* rSearch(Node* node) const {
+	Node* leafSearch(Node* node) const {
 		if (!node)
 			return node;
-		Node* searchResult = rSearch(node->right);
-		if (!searchResult)
-			searchResult = rSearch(node->left);
-		if (!searchResult) {
+		if (!node->left && !node->right)
 			return node;
-		}
-		if (searchResult == node->right)
-			node->right = nullptr;
-		if (searchResult == node->left)
-			node->left = nullptr;
-		return searchResult;
+		Node* searchResult = leafSearch(node->right);
+		if (searchResult)
+			return searchResult;
+		return leafSearch(node->left);
 	}
+
+	Node* parentSearch(Node* node, Node* fnode) const {
+		if (fnode == root)
+			return nullptr;
+		if (!node)
+			return node;
+		if (fnode == node->left || fnode == node->right)
+			return node;
+		Node* searchResult = parentSearch(node->right, fnode);
+		if (searchResult)
+			return searchResult;
+		return parentSearch(node->left, fnode);
+	}
+
+	Node* deleteNode(Node* node, int key) {
+		if (!node) {
+			return nullptr;
+		}
+		
+		if (node->key == key) {
+			if (!node->left && !node->right) {
+				delete node;
+				return nullptr;
+			}
+
+			if (!node->left) {
+				Node* temp = node->right;
+				Node* parent = parentSearch(root, node);
+				delete node;
+				if (!parent) {
+					root = temp;
+					return temp;
+				}
+				parent->right = temp;
+				return temp;
+			}
+
+			if (!node->right) {
+				Node* temp = node->left;
+				Node* parent = parentSearch(root, node);
+				delete node;
+				if (!parent) {
+					root = temp;
+					return temp;
+				}
+				parent->left = temp;
+				return temp;
+			}
+			
+			Node* temp = leafSearch(node);
+			Node* parentTemp = parentSearch(root, temp);
+			if (parentTemp->left == temp)
+				parentTemp->left = nullptr;
+			else
+				parentTemp->right = nullptr;
+			if (node != root) {
+				Node* parent = parentSearch(root, node);
+				if (parent->left == node) {
+					parent->left = temp;
+				}
+				else
+					parent->right = temp;
+				temp->left = node->left;
+				temp->right = node->right;
+				delete node;
+				return temp;
+			}
+			temp->left = node->left;
+			temp->right = node->right;
+			root = temp;
+			delete node;
+			return temp;
+			
+		}
+		Node* searchResult = deleteNode(node->right, key);
+		if (searchResult)
+			return searchResult;
+		searchResult = deleteNode(node->left, key);
+	}
+
+	void printTree(Node* node, int depth = 0) const {
+		if (!node)
+			return;
+		printTree(node->right, depth + 1);
+		std::cout << std::string(depth * 4, ' ') << node->key << std::endl;
+		printTree(node->left, depth + 1);
+	}
+
 
 public:
 	BinaryTree() = default;
@@ -126,13 +183,21 @@ public:
 	}
 
 	virtual bool deleteNode(int key) {
-		return deleteNode(root, key);
+		if (isEmpty()) {
+			return false;
+		}
+		if (deleteNode(root, key) == nullptr)
+			return false;
+		return true;
 	}
 
 	virtual Node* searchNode(int key) const {
 		return nlrSearch(root, key);
 	}
 
+	void print() const {
+		printTree(root);
+	}
 
 };
 
@@ -143,5 +208,18 @@ class SearchTree : public BinaryTree {
 int main() {
 	BinaryTree mTree;
 	mTree.insert(10);
+	mTree.insert(20);
+	mTree.insert(14);
+	mTree.insert(44);
+	mTree.insert(54);
+	mTree.insert(55);
+	mTree.insert(56);
+	mTree.insert(57);
+	mTree.print();
+	std::cout << "--------------------------------------------------------------------------" << std::endl;
+	std::cout << mTree.deleteNode(30) << std::endl;
+	std::cout << mTree.deleteNode(10) << std::endl;
+	std::cout << "--------------------------------------------------------------------------" << std::endl;
+	mTree.print();
 	return 0;
 }
