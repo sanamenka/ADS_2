@@ -183,7 +183,7 @@ public:
 		return false;
 	}
 	
-	int countNodes(const Node* node) {
+	int countNodes(const Node* node) const {
 		if (node == nullptr)
 			return 0;
 		return 1 + countNodes(node->left) + countNodes(node->right);
@@ -212,7 +212,7 @@ public:
 		return nlrSearch(root, key);
 	}
 
-	void print() const {
+	virtual void print() const {
 		printTree(root);
 	}
 
@@ -362,6 +362,10 @@ public:
 		return searchBST(root, key);
 	}
 
+	void print() const override {
+		printTree(root);
+	}
+
 };
 
 int main() {
@@ -401,7 +405,7 @@ int main() {
 	//std::cout << "--------------------------------------------------------------------------" << std::endl;
 	//mTree.print();
 
-	SearchTree mTree2;
+	/*SearchTree mTree2;
 	mTree2.insert(10);
 	mTree2.insert(11);
 	mTree2.insert(13);
@@ -431,7 +435,13 @@ int main() {
 	std::cout << "--------------------------------------------------------------------------" << std::endl;
 	std::cout << mTree2.deleteNode(13) << std::endl;
 	std::cout << "--------------------------------------------------------------------------" << std::endl;
-	mTree2.print();
+	mTree2.print();*/
+
+	BinaryTree* mTree3 = new SearchTree;
+	mTree3->insert(4);
+	mTree3->print();
+	std::cout << mTree3->deleteNode(4) << std::endl;
+	mTree3->print();
 
 	return 0;
 }
